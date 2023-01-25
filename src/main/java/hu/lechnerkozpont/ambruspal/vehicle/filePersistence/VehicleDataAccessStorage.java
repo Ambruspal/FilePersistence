@@ -36,9 +36,8 @@ public class VehicleDataAccessStorage implements VehicleDataAccessInterface {
     }
 
     @Override
-    public String getVehicleByRegistrationNumber(Vehicle findVehicle) {
-        String id = findVehicle.getRegistrationNumber();
-        System.out.println("findVehicle.getRegistrationNumber(): " + id);
+    public Vehicle getVehicleByRegistrationNumber(String registrationNumber) {
+        System.out.println("findVehicle.getRegistrationNumber(): " + registrationNumber);
         String line = "";
         String splitBy = ",";
 
@@ -48,14 +47,24 @@ public class VehicleDataAccessStorage implements VehicleDataAccessInterface {
             {
                 String[] vehicle = line.split(splitBy);    // use comma as separator
                 System.out.println("Vehicle [registrationNumber=" + vehicle[0] + ", make=" + vehicle[1] + ", model=" + vehicle[2] + ", numberOfSeats=" + vehicle[3] + ", vehicleType= " + vehicle[4]);
-                if (vehicle[0].equals(id)) {
+                if (vehicle[0].equals(registrationNumber)) {
                     System.out.println("Found");
+
+                    Vehicle entityVehicle = new Vehicle();
+
+                    entityVehicle.setRegistrationNumber(vehicle[0]);
+                    entityVehicle.setMake(vehicle[1]);
+                    entityVehicle.setModel(vehicle[2]);
+                    entityVehicle.setNumberOfSeats(vehicle[3]);
+                    entityVehicle.setVehicleType(vehicle[4]);
+
+                    return entityVehicle;
                 }
             }
         } catch (Exception exc) {
-            return "File not found!";
+
         }
 
-        return "Valami";
+        throw new VehicleNotFoundException();
     }
 }
